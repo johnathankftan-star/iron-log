@@ -18,6 +18,10 @@ jobs:
           npm install
           npm install @capacitor/core @capacitor/cli @capacitor/android
           npm install -D tailwindcss postcss autoprefixer
+      - name: Inject Secrets
+        run: |
+          echo "window.__firebase_config = '${{ secrets.FIREBASE_CONFIG }}';" > src/secrets.js
+          echo "window.__gemini_api_key = '${{ secrets.GEMINI_API_KEY }}';" >> src/secrets.js
       - name: Build Web App
         run: |
           npx tailwindcss init -p
