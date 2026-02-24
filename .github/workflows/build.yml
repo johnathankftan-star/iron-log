@@ -22,11 +22,12 @@ jobs:
         run: |
           npx tailwindcss init -p
           npm run build
-      - name: Capacitor Sync
+      - name: Capacitor Setup
         run: |
-          npx cap init IronLog com.ironlog.app --web-dir dist
-          npx cap add android
-          npx cap sync android
+          export CI=true
+          npx cap init IronLog com.ironlog.app --web-dir dist --non-interactive || true
+          npx cap add android --non-interactive || true
+          npx cap sync android --non-interactive
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -36,7 +37,7 @@ jobs:
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug
+          ./gradlew assembleDebug --no-daemon
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
